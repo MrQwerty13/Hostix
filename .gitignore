@@ -1,0 +1,18 @@
+# Build output
+/bin/
+/dist/
+/hostix
+/hostix.exe
+
+# Go tooling
+/coverage.out
+/coverage.html
+
+# Local configuration
+.env
+hostix.yaml
+
+# Editors and operating systems
+.DS_Store
+.idea/
+.vscode/
