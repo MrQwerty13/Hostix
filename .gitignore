@@ -3,6 +3,7 @@
 /dist/
 /hostix
 /hostix.exe
+/projects/
 
 # Go tooling
 /coverage.out
