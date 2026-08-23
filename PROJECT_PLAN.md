@@ -32,7 +32,7 @@
 ### 3.1 Основной язык — Go
 - **Cobra** — CLI-фреймворк (команды, флаги, автодополнение)
 - **Viper** — конфиги (`hostix.yaml`, env-переменные)
-- **docker/docker/client** — официальный Docker SDK (вместо шелл-вызовов)
+- **moby/moby/client + moby/moby/api** — поддерживаемые модули Docker Engine SDK (вместо шелл-вызовов; см. ADR 0002)
 - **golang.org/x/crypto/ssh** — SSH-клиент для exec в Tart VM
 - **zerolog / zap** — структурированное логирование
 - **cgo** — мост к C++ модулю
@@ -178,10 +178,12 @@ restart_policy: on-failure
 
 ### Фаза 1 — MVP на Docker, только Go (3-4 недели)
 Цель: `hostix run .` работает для Python-проекта на Linux/macOS через Docker.
-- [ ] `Runtime` интерфейс + `DockerRuntime` (через `docker/docker/client`)
-- [ ] `detect` пакет: определение Python по `requirements.txt`/`pyproject.toml`
-- [ ] Генерация Dockerfile из шаблона для Python
+- [x] `Runtime` интерфейс + `DockerRuntime` (через поддерживаемые Moby client/api модули)
+- [x] `detect` пакет: определение Python по `requirements.txt`/`pyproject.toml`
+- [x] Генерация Dockerfile из шаблона для Python
 - [ ] Команды: `run`, `ps`, `logs`, `stop`, `rm`
+  - [x] `run`
+  - [ ] `ps`, `logs`, `stop`, `rm`
 - [ ] Базовые интеграционные тесты (testcontainers-go)
 - [ ] `hostix.yaml` — чтение конфига (viper)
 

@@ -28,6 +28,9 @@ func NewRootCommand(version string) *cobra.Command {
 		Version:       version,
 	}
 
-	cmd.AddCommand(newDoctorCommand())
+	cmd.AddCommand(
+		newDoctorCommand(),
+		newRunCommand(defaultRunServiceFactory),
+	)
 	return cmd
 }

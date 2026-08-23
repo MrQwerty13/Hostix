@@ -3,8 +3,16 @@ package runtime
 
 import (
 	"context"
+	"errors"
 	"io"
 	"time"
+)
+
+var (
+	// ErrNotFound indicates that a runtime instance does not exist.
+	ErrNotFound = errors.New("runtime instance not found")
+	// ErrAlreadyExists indicates that an instance name is already in use.
+	ErrAlreadyExists = errors.New("runtime instance already exists")
 )
 
 // Runtime exposes only lifecycle operations shared by containers and virtual
@@ -24,6 +32,7 @@ type Runtime interface {
 type CreateRequest struct {
 	Name          string
 	Image         string
+	Command       []string
 	ProjectDir    string
 	Environment   map[string]string
 	Ports         []PortBinding
@@ -79,6 +88,7 @@ type Status struct {
 	ID          string
 	Name        string
 	State       State
+	Managed     bool
 	StartedAt   time.Time
 	CPUPercent  float64
 	MemoryBytes int64

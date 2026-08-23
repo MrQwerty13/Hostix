@@ -10,12 +10,14 @@ Tart VM. Пользователь работает с одинаковыми к�
 
 - `cmd/hostix` — минимальная точка входа и обработка кода завершения.
 - `internal/cli` — команды Cobra, валидация аргументов и представление результата.
+- `internal/app` — сценарии приложения: порядок detect → build → replace → run.
 - `internal/runtime` — общий контракт жизненного цикла изолированной среды.
-- `internal/runtime/docker` — будущий адаптер Docker SDK.
+- `internal/runtime/docker` — адаптер поддерживаемых Moby client/api модулей
+  для Docker Engine API.
 - `internal/runtime/tart` — будущий адаптер Tart CLI и SSH.
 - `internal/doctor` — диагностика локального окружения без зависимости от CLI.
-- `internal/detect` — будущее определение стека проекта.
-- `internal/image` — будущая генерация сборочных файлов из шаблонов.
+- `internal/detect` — определение Python-проектов и безопасной команды запуска.
+- `internal/image` — генерация Dockerfile и временного TAR build context.
 
 ## Направление зависимостей
 
@@ -25,9 +27,10 @@ CLI координирует сценарии и зависит от интер�
 Docker или Tart.
 
 ```text
-cmd/hostix -> internal/cli -> internal/runtime <- docker/tart adapters
+cmd/hostix -> internal/cli -> internal/app -> detect/image
+                          |              -> runtime/docker
                           -> internal/doctor
-                          -> internal/detect
+internal/runtime <- docker/tart adapters
 ```
 
 ## Границы runtime-абстракции
@@ -45,7 +48,6 @@ MVP реализуется на Go. C++ и cgo не входят в обязат
 
 ## Следующий вертикальный срез
 
-1. Реализовать `DockerRuntime` через Docker SDK.
-2. Определять Python-проект по `pyproject.toml` или `requirements.txt`.
-3. Генерировать Dockerfile во временной рабочей области.
-4. Связать эти компоненты командой `hostix run .`.
+1. Добавить `hostix ps`, `logs`, `stop` и `rm` поверх готового Runtime.
+2. Прочитать `hostix.yaml` и объединять конфиг с CLI-флагами.
+3. Добавить Docker integration tests на хосте с доступным daemon.

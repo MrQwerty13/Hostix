@@ -29,9 +29,15 @@ func printDoctorReport(cmd *cobra.Command, report doctor.Report) {
 	for _, tool := range report.Tools {
 		status := "missing"
 		detail := tool.Error
-		if tool.Available {
+		if tool.Operational {
 			status = "ok"
 			detail = tool.Version
+		} else if tool.Available {
+			status = "unavailable"
+			detail = tool.Version
+			if tool.Error != "" {
+				detail += "; " + tool.Error
+			}
 		}
 		if detail != "" {
 			fmt.Fprintf(cmd.OutOrStdout(), "[%s] %s: %s\n", status, tool.Name, detail)
